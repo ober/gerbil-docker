@@ -21,6 +21,7 @@ base-ubuntu:
 gerbil-gambit:
 	docker build --build-arg squid=$(squid_ip) --rm=true --build-arg squid=$(squid_ip) --no-cache -t gerbil-gambit ./official
 	docker tag gerbil-gambit gerbil/gambit
+	docker push gerbil/gambit
 
 base-centos:
 	docker build --build-arg squid=$(squid_ip)  --rm=true --no-cache -t base-centos ./base-centos
