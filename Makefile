@@ -1,4 +1,4 @@
-.PHONY: docker base-centos base-ubuntu centos ubuntu base-fedora fedora
+.PHONY: docker base-centos base-ubuntu centos ubuntu base-fedora fedora centos-static
 
 $(eval squid_ip := $(shell docker inspect squid|jq -r '.[].NetworkSettings.IPAddress'))
 
@@ -12,7 +12,7 @@ ubuntu:
 
 centos:
 	docker build --build-arg squid=$(squid_ip) -t centos ./centos
-	docker tag gerbil-scheme jaimef/centos
+	docker tag centos jaimef/centos
 
 base-ubuntu:
 	docker build --build-arg squid=$(squid_ip) --rm=true --build-arg squid=$(squid_ip) --no-cache -t gerbil-base ./base-ubuntu
@@ -24,18 +24,20 @@ gerbil-gambit:
 	docker push gerbil/gambit
 
 base-centos:
-	docker build --build-arg squid=$(squid_ip)  --rm=true --no-cache -t base-centos ./base-centos
-	docker tag gerbil-base jaimef/base:centos
+	docker build --build-arg squid=$(squid_ip) --rm=true --no-cache -t base-centos ./base-centos
+	docker tag base-centos jaimef/base:centos
+
+centos-static:
+	docker build --build-arg squid=$(squid_ip) --rm=true --no-cache -t centos-static ./centos-static
+	docker tag centos-static jaimef/centos:static
 
 base-fedora:
-	docker build --build-arg squid=$(squid_ip)  --rm=true --no-cache -t gerbil-base ./base-fedora
+	docker build --build-arg squid=$(squid_ip) --rm=true --no-cache -t gerbil-base ./base-fedora
 	docker tag gerbil-base gerbil/base:fedora
-
 
 push-all:
 	docker push jaimef/base:centos
-	docker push jaimef/base:ubuntu
 	docker push jaimef/centos
-	docker push jaimef/ubuntu
+	docker push jaimef/centos:static
 
 docker: ubuntu
