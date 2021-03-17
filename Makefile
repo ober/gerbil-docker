@@ -31,6 +31,10 @@ centos-static:
 	docker build --build-arg squid=$(squid_ip) --rm=true --no-cache -t centos-static ./centos-static
 	docker tag centos-static jaimef/centos:static
 
+alpine-static:
+	docker build --build-arg squid=$(squid_ip) --rm=true --no-cache -t alpine-static ./alpine-static
+	docker tag centos-static jaimef/alpine:static
+
 base-fedora:
 	docker build --build-arg squid=$(squid_ip) --rm=true --no-cache -t gerbil-base ./base-fedora
 	docker tag gerbil-base gerbil/base:fedora
