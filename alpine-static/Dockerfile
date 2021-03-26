@@ -43,6 +43,7 @@ RUN cd /opt \
     && cd gambit-src \
     && git fetch -a \
     && git checkout ${GAMBIT_VERSION} \
+    && sed -i -e 's#SSL_VERIFY_PEER#SSL_VERIFY_NONE#g' lib/os_io.c
     && ./configure \
     --prefix=${GAMBIT_HOME} \
     --enable-single-host \
