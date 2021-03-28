@@ -1,6 +1,6 @@
-.PHONY: docker base-centos base-ubuntu centos ubuntu base-fedora fedora centos-static
+.PHONY: docker base-centos base-ubuntu centos ubuntu base-fedora fedora centos-static alpine-static alpine-current-static
 
-$(eval squid_ip := $(shell docker inspect squid|jq -r '.[].NetworkSettings.IPAddress'))
+#$(eval squid_ip := $(shell docker inspect squid|jq -r '.[].NetworkSettings.IPAddress'))
 
 incremental:
 	docker build --build-arg squid=$(squid_ip) --rm=true -t gerbil-scheme .
@@ -32,8 +32,12 @@ centos-static:
 	docker tag centos-static jaimef/centos:static
 
 alpine-static:
-	docker build --build-arg squid=$(squid_ip) --rm=true --no-cache -t alpine-static ./alpine-static
-	docker tag centos-static jaimef/alpine:static
+	docker build --rm=true --no-cache -t alpine-static ./alpine-static
+	docker tag alpine-static jaimef/alpine:static
+
+alpine-current-static:
+	docker build --rm=true --no-cache -t alpine-current-static ./alpine-current-static
+	docker tag alpine-current-static jaimef/alpine-current:static
 
 base-fedora:
 	docker build --build-arg squid=$(squid_ip) --rm=true --no-cache -t gerbil-base ./base-fedora
