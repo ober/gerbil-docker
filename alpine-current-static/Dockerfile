@@ -1,7 +1,7 @@
 FROM alpine:latest
 
-ARG GAMBIT_VERSION=v4.9.3
-ARG GERBIL_VERSION=v0.16
+ARG GAMBIT_VERSION=master
+ARG GERBIL_VERSION=master
 
 ENV GAMBIT_HOME=/opt/gerbil
 ENV GERBIL_HOME=/opt/gerbil
@@ -28,6 +28,7 @@ RUN apk update && apk add \
     mariadb-dev \
     musl \
     musl-dev \
+    nodejs \
     openssl-dev \
     openssl-libs-static \
     sqlite-dev \
@@ -38,35 +39,41 @@ RUN apk update && apk add \
 RUN git config --global url.https://github.com/.insteadOf git://github.com/
 
 # install gambit
-RUN cd /opt \
-    && git clone https://github.com/gambit/gambit gambit-src\
-    && cd gambit-src \
-    && git fetch -a \
+RUN cd /opt && git clone https://github.com/gambit/gambit gambit-src
+RUN cd /opt/gambit-src && git fetch -a
+RUN cd /opt/gambit-src \
+    && sed -i -e 's#SSL_VERIFY_PEER#SSL_VERIFY_NONE#g' lib/os_io.c \
     && ./configure \
-    --prefix=${GAMBIT_HOME} \
-    --enable-single-host \
-    --enable-openssl \
-    --enable-multiple-versions \
     --enable-default-runtime-options=f8,-8,t8 \
-    --enable-poll\
-    && make -j4 bootstrap \
-    && make bootclean \
-    && make -j4 \
-    && make modules \
-    && make install
+    --enable-poll \
+    --enable-openssl \
+    --enable-targets=js \
+    --enable-default-compile-options="(compactness 9)" \
+    --enable-multiple-versions \
+    --enable-multiple-threaded-vms \
+    --enable-single-host \
+    --prefix=${GAMBIT_HOME} \
+    --enable-smp
+
+RUN cd /opt/gambit-src && make -j4
+RUN cd /opt/gambit-src && make bootstrap
+RUN cd /opt/gambit-src && make bootclean
+RUN cd /opt/gambit-src && make -j4 #--trace -d #-j4
+RUN cd /opt/gambit-src && make modules
+RUN cd /opt/gambit-src && make install
 
 # install gerbil
-RUN cd /opt \
-    && git clone https://github.com/vyzo/gerbil gerbil-src \
-    && cd gerbil-src/src \
+RUN cd /opt && git clone https://github.com/vyzo/gerbil gerbil-src
+ENV PATH=/opt/gerbil/v4.9.3/bin:$PATH
+RUN cd /opt/gerbil-src/src \
     && ./configure \
     --prefix=${GERBIL_HOME} \
     --enable-leveldb \
     --enable-libxml \
     --enable-libyaml \
-    --enable-lmdb \
-     && ./build.sh \
-     && ./install
+    --enable-lmdb
+RUN cd /opt/gerbil-src/src && ./build.sh
+RUN cd /opt/gerbil-src/src && ./install
 
 RUN mkdir -p /src
 
