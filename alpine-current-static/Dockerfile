@@ -7,7 +7,7 @@ ENV GAMBIT_HOME=/opt/gerbil
 ENV GERBIL_HOME=/opt/gerbil
 ENV GERBIL_PATH=/src/.gerbil
 ENV PATH=${GAMBIT_HOME}/bin:${GERBIL_HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin
-ENV GERBIL_BUILD_CORES=4
+ENV GERBIL_BUILD_CORES=1
 
 RUN mkdir -p /src /opt
 
@@ -41,25 +41,27 @@ RUN git config --global url.https://github.com/.insteadOf git://github.com/
 # install gambit
 RUN cd /opt && git clone https://github.com/gambit/gambit gambit-src
 RUN cd /opt/gambit-src && git fetch -a
+
 RUN cd /opt/gambit-src \
     && sed -i -e 's#SSL_VERIFY_PEER#SSL_VERIFY_NONE#g' lib/os_io.c \
-    && ./configure \
+    && ./configure CC='gcc -D___SUPPORT_LOWLEVEL_EXEC' \
     --enable-default-runtime-options=f8,-8,t8 \
     --enable-poll \
     --enable-openssl \
-    --enable-targets=js \
+    --enable-targets=js,ruby,python,java,php,go,x86-64 \
     --enable-default-compile-options="(compactness 9)" \
     --enable-multiple-versions \
-    --enable-multiple-threaded-vms \
     --enable-single-host \
     --prefix=${GAMBIT_HOME} \
     --enable-smp
 
-RUN cd /opt/gambit-src && make -j4
+#    --enable-multiple-threaded-vms \ # segfaults
+
+RUN cd /opt/gambit-src && make -j8
 RUN cd /opt/gambit-src && make bootstrap
 RUN cd /opt/gambit-src && make bootclean
-RUN cd /opt/gambit-src && make -j4 #--trace -d #-j4
-RUN cd /opt/gambit-src && make modules
+RUN cd /opt/gambit-src && make -j8
+RUN cd /opt/gambit-src && make -j8 modules
 RUN cd /opt/gambit-src && make install
 
 # install gerbil
