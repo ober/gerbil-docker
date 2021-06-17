@@ -48,7 +48,7 @@ RUN cd /opt/gambit-src \
     --enable-default-runtime-options=f8,-8,t8 \
     --enable-poll \
     --enable-openssl \
-    --enable-targets=js,ruby,python,java,php,go,x86-64 \
+    --enable-targets=js,ruby,python,java,php,go \
     --enable-default-compile-options="(compactness 9)" \
     --enable-multiple-versions \
     --enable-single-host \
