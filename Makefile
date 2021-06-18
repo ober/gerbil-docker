@@ -37,6 +37,7 @@ alpine-static:
 
 alpine-current-static:
 	docker build --rm=true --no-cache -t alpine-current-static ./alpine-current-static
+	#docker build -t alpine-current-static ./alpine-current-static
 	docker tag alpine-current-static jaimef/alpine-current:static
 
 base-fedora:

@@ -43,13 +43,13 @@ RUN cd /opt \
     && cd gambit-src \
     && git fetch -a \
     && git checkout ${GAMBIT_VERSION} \
-    && sed -i -e 's#SSL_VERIFY_PEER#SSL_VERIFY_NONE#g' lib/os_io.c
+    && sed -i -e 's#SSL_VERIFY_PEER#SSL_VERIFY_NONE#g' lib/os_io.c \
     && ./configure \
     --prefix=${GAMBIT_HOME} \
     --enable-single-host \
     --enable-openssl \
     --enable-default-runtime-options=f8,-8,t8 \
-    --enable-poll\
+    --enable-poll \
     && make -j4 \
     && make install
 
