@@ -71,4 +71,4 @@ RUN mkdir -p /src
 
 WORKDIR /src
 
-CMD ["/opt/jedi/deploy/jedi"]
+CMD ["/opt/jedi/build/develop/jedi"]
