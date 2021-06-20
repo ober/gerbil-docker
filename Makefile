@@ -1,4 +1,4 @@
-.PHONY: docker base-centos base-ubuntu centos ubuntu base-fedora fedora centos-static alpine-static alpine-current-static
+.PHONY: docker base-centos base-ubuntu centos ubuntu base-fedora fedora centos-static alpine-static alpine-current-static alpine-current-jedi ubuntu-current-jedi
 
 #$(eval squid_ip := $(shell docker inspect squid|jq -r '.[].NetworkSettings.IPAddress'))
 
@@ -13,6 +13,10 @@ ubuntu:
 centos:
 	docker build --build-arg squid=$(squid_ip) -t centos ./centos
 	docker tag centos jaimef/centos
+
+ubuntu-current-jedi:
+	docker build --rm=true --no-cache -t ubuntu-current-jedi ./ubuntu-current-jedi
+	docker tag ubuntu-current-jedi jaimef/jedi:ubuntu
 
 base-ubuntu:
 	docker build --build-arg squid=$(squid_ip) --rm=true --build-arg squid=$(squid_ip) --no-cache -t gerbil-base ./base-ubuntu
@@ -40,6 +44,11 @@ alpine-current-static:
 	#docker build -t alpine-current-static ./alpine-current-static
 	docker tag alpine-current-static jaimef/alpine-current:static
 
+alpine-current-jedi:
+	#docker build --rm=true --no-cache -t alpine-current-jedi ./alpine-current-jedi
+	docker build -t alpine-current-jedi ./alpine-current-jedi
+	docker tag alpine-current-jedi jaimef/alpine-current-jedi:static
+
 base-fedora:
 	docker build --build-arg squid=$(squid_ip) --rm=true --no-cache -t gerbil-base ./base-fedora
 	docker tag gerbil-base gerbil/base:fedora
@@ -48,5 +57,6 @@ push-all:
 	docker push jaimef/base:centos
 	docker push jaimef/centos
 	docker push jaimef/centos:static
+
 
 docker: ubuntu
