@@ -15,7 +15,7 @@ centos:
 	docker tag centos jaimef/centos
 
 ubuntu-current-jedi:
-	docker build --rm=true --no-cache -t ubuntu-current-jedi ./ubuntu-current-jedi
+ 	docker build --rm=true --no-cache -t ubuntu-current-jedi ./ubuntu-current-jedi
 	docker tag ubuntu-current-jedi jaimef/jedi:ubuntu
 
 base-ubuntu:
