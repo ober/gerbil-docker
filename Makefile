@@ -1,5 +1,6 @@
 .PHONY: docker base-centos base-ubuntu centos ubuntu base-fedora fedora centos-static alpine-static alpine-current-static alpine-current-jedi ubuntu-current-jedi
 
+
 #$(eval squid_ip := $(shell docker inspect squid|jq -r '.[].NetworkSettings.IPAddress'))
 
 incremental:
@@ -15,15 +16,16 @@ centos:
 	docker tag centos jaimef/centos
 
 ubuntu-current-jedi:
+
 	docker build --rm=true --no-cache -t ubuntu-current-jedi ./ubuntu-current-jedi
 	docker tag ubuntu-current-jedi jaimef/jedi:ubuntu
 
 base-ubuntu:
-	docker build --build-arg squid=$(squid_ip) --rm=true --build-arg squid=$(squid_ip) --no-cache -t gerbil-base ./base-ubuntu
+	docker build --rm=true --build-arg squid=$(squid_ip) --no-cache -t gerbil-base ./base-ubuntu
 	docker tag gerbil-base gerbil/base:ubuntu
 
 gerbil-gambit:
-	docker build --build-arg squid=$(squid_ip) --rm=true --build-arg squid=$(squid_ip) --no-cache -t gerbil-gambit ./official
+	docker build --rm=true --build-arg squid=$(squid_ip) --no-cache -t gerbil-gambit ./official
 	docker tag gerbil-gambit gerbil/gambit
 	docker push gerbil/gambit
 

@@ -13,7 +13,6 @@ RUN apt install -y \
     autoconf \
     automake \
     build-essential \
-    gfortran \
     git \
     libffi-dev \
     libglu1-mesa \
@@ -29,12 +28,17 @@ RUN apt install -y \
     lsb-release \
     pkg-config \
     sudo \
-    tmux \
+    libcairo2-dev \
+    libcairo2 \
+    libglew-dev \
+    libgstreamer-plugins-base1.0-0 \
+    libfreetype6-dev \
+    libfreetype6 \
     tzdata \
-    wget \
     x11-xserver-utils \
     zlib1g-dev
 
+RUN ln -s /usr/lib/x86_64-linux-gnu/libGLEW.so /usr/lib/x86_64-linux-gnu/libGLEW.so.1.13
 RUN git config --global url.https://github.com/.insteadOf git://github.com/
 
 # install gambit
