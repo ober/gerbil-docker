@@ -14,16 +14,17 @@ RUN mkdir -p /src /opt
 RUN apk update && apk add \
     autoconf \
     automake \
+    cmake \
     curl \
+    g++ \
     gcc \
     git \
-    leveldb \
-    leveldb-dev \
     libgcc \
     libtool \
+    leveldb-dev\
+    lmdb-dev \
     libxml2-dev \
     linux-headers \
-    lmdb-dev \
     make \
     mariadb-dev \
     musl \
@@ -36,16 +37,25 @@ RUN apk update && apk add \
     yaml-static \
     zlib-static
 
+RUN cd /src && git clone --recurse-submodules https://github.com/google/leveldb.git
+RUN cd /src/leveldb && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
+RUN cd /src/leveldb && mv build/libleveldb.a /usr/lib
+
+RUN cd /src && git clone https://github.com/LMDB/lmdb
+RUN cd /src/lmdb/libraries/liblmdb && make
+RUN cd /src/lmdb/libraries/liblmdb && mv liblmdb.a /usr/lib
+
 RUN git config --global url.https://github.com/.insteadOf git://github.com/
 
 # install gambit
 RUN cd /opt && git clone https://github.com/gambit/gambit gambit-src
 RUN cd /opt/gambit-src && git fetch -a
 
-#     CC='gcc -D___SUPPORT_LOWLEVEL_EXEC' \
 RUN cd /opt/gambit-src \
+    && git fetch -a \
+    && git checkout ${GAMBIT_VERSION} \
     && sed -i -e 's#SSL_VERIFY_PEER#SSL_VERIFY_NONE#g' lib/os_io.c \
-    && ./configure \
+    && ./configure CC='gcc -D___SUPPORT_LOWLEVEL_EXEC' \
     --enable-default-runtime-options=f8,-8,t8 \
     --enable-poll \
     --enable-openssl \
@@ -53,8 +63,7 @@ RUN cd /opt/gambit-src \
     --enable-default-compile-options="(compactness 9)" \
     --enable-multiple-versions \
     --enable-single-host \
-    --prefix=${GAMBIT_HOME} \
-    --enable-smp
+    --prefix=${GAMBIT_HOME}
 
 RUN cd /opt/gambit-src && make -j4
 RUN cd /opt/gambit-src && make bootstrap
@@ -65,7 +74,7 @@ RUN cd /opt/gambit-src && make install
 
 # install gerbil
 RUN cd /opt && git clone https://github.com/vyzo/gerbil gerbil-src
-ENV PATH=/opt/gerbil/v4.9.3/bin:$PATH
+ENV PATH=/opt/gambit/current/bin:$PATH
 RUN cd /opt/gerbil-src/src \
     && ./configure \
     --prefix=${GERBIL_HOME} \
