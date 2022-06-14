@@ -1,19 +1,21 @@
 FROM alpine:latest
 
-ARG GAMBIT_VERSION=c0753ff127baefebd00193a135f48f18c59c496a
-ARG GERBIL_VERSION=master
+ARG GAMBIT_VERSION=v4.9.4
+ARG GERBIL_VERSION=v0.17.0
 
 ENV GAMBIT_HOME=/opt/gambit
 ENV GERBIL_HOME=/opt/gerbil
 ENV GERBIL_PATH=/src/.gerbil
 ENV PATH=${GAMBIT_HOME}/bin:${GERBIL_HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin
-ENV GERBIL_BUILD_CORES=4
+ENV GERBIL_BUILD_CORES=8
 
 RUN mkdir -p /src /opt
 
 RUN apk update && apk add \
     autoconf \
     automake \
+    bash \
+    coreutils \
     cmake \
     curl \
     g++ \
@@ -54,25 +56,26 @@ RUN cd /opt/gambit-src && git fetch -a
 RUN cd /opt/gambit-src \
     && git fetch -a \
     && git checkout ${GAMBIT_VERSION} \
-    && sed -i -e 's#SSL_VERIFY_PEER#SSL_VERIFY_NONE#g' lib/os_io.c \
-    && ./configure CC='gcc -D___SUPPORT_LOWLEVEL_EXEC' \
+    && ./configure \
     --enable-default-runtime-options=f8,-8,t8 \
     --enable-poll \
     --enable-openssl \
-    --enable-targets=js,ruby,python \
-    --enable-default-compile-options="(compactness 9)" \
     --enable-multiple-versions \
     --enable-single-host \
     --prefix=${GAMBIT_HOME}
 
-RUN cd /opt/gambit-src && make -j4
+#CC='gcc -D___SUPPORT_LOWLEVEL_EXEC' \
+#    --enable-targets=js,ruby,python \
+#    --enable-default-compile-options="(compactness 9)" \
+
+RUN cd /opt/gambit-src && make -j${GERBIL_BUILD_CORES}
 RUN cd /opt/gambit-src && make bootstrap
 RUN cd /opt/gambit-src && make bootclean
-RUN cd /opt/gambit-src && make -j4
-RUN cd /opt/gambit-src && make -j4 modules
+RUN cd /opt/gambit-src && make -j${GERBIL_BUILD_CORES}
+RUN cd /opt/gambit-src && make -j${GERBIL_BUILD_CORES} modules
 RUN cd /opt/gambit-src && make install
 
-# install gerbil
+#install gerbil
 RUN cd /opt && git clone https://github.com/vyzo/gerbil gerbil-src
 ENV PATH=/opt/gambit/current/bin:$PATH
 RUN cd /opt/gerbil-src/src \
@@ -81,11 +84,10 @@ RUN cd /opt/gerbil-src/src \
     --enable-leveldb \
     --enable-libxml \
     --enable-libyaml \
+    --enable-mysql \
     --enable-lmdb
 RUN cd /opt/gerbil-src/src && ./build.sh
 RUN cd /opt/gerbil-src/src && ./install
-
-RUN mkdir -p /src
 
 WORKDIR /src
 
