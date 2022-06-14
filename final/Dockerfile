@@ -1,9 +1,9 @@
 ARG distro
+
+FROM ${distro}:latest as base
 ARG GERBIL_VERSION=v0.17.0
 ARG GAMBIT_VERSION=v4.9.4
 ENV GERBIL_BUILD_CORES=16
-
-FROM ${distro}:latest as base
 ARG distro
 ENV pkgfmt rpm
 RUN mkdir -p /src /opt
