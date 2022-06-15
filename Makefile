@@ -2,19 +2,25 @@
 
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-#$(eval squid_ip := $(shell docker inspect squid|jq -r '.[].NetworkSettings.IPAddress'))
+$(eval squid_ip := $(shell docker inspect squid|jq -r '.[].NetworkSettings.IPAddress'))
+$(info $(squid_ip) is squid)
 
-fedora:
-	docker build --target final --build-arg distro="fedora" -t final $(ROOT_DIR)
-	docker tag final jaimef/gerbil-fedora
+alpine:
+	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="alpine" -t final $(ROOT_DIR)
+	docker tag final jaimef/gerbil-alpine
 
 centos:
-	docker build --target final --build-arg distro="centos" -t final $(ROOT_DIR)
+	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="centos" -t final $(ROOT_DIR)
 	docker tag final jaimef/gerbil-centos
 
+fedora:
+	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="fedora" -t final $(ROOT_DIR)
+	docker tag final jaimef/gerbil-fedora
+
 ubuntu:
-	docker build --target final --build-arg distro="ubuntu" -t final $(ROOT_DIR)
+	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="ubuntu" -t final $(ROOT_DIR)
 	docker tag final jaimef/gerbil-ubuntu
+    docker run -v $(PWD):/src -t jaimef/gerbil-ubuntu "mv /opt/"
 
 ubuntu-current-jedi:
 	docker build --rm=true --no-cache -t ubuntu-current-jedi $(ROOT_DIR)/ubuntu-current-jedi
