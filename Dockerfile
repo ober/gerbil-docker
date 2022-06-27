@@ -45,7 +45,7 @@ RUN cd /opt/gambit-src \
     && git checkout ${GAMBIT_VERSION} \
     && ./configure CC='gcc -D___SUPPORT_LOWLEVEL_EXEC' \
     --enable-default-runtime-options=f8,-8,t8 \
-     --enable-targets=js,ruby,python \
+    --enable-targets=js,ruby,python \
     --enable-poll \
     --enable-openssl \
     --enable-default-compile-options="(compactness 9)" \
@@ -74,11 +74,10 @@ RUN cd /opt/gerbil-src/src && ./build.sh
 RUN cd /opt/gerbil-src/src && ./install
 
 FROM gerbil as final
-ARG GERBIL_VERSION=v0.17.0
-ARG GAMBIT_VERSION=v4.9.4
+ARG GERBIL_VERSION
+ARG GAMBIT_VERSION
 RUN rm -rf /opt/gerbil-src /opt/gambit-src
-RUN tar -czvf /tmp/gerbil-${GERBIL_VERSION}-gambit-${GAMBIT_VERSION}.tgz /opt
-RUN mv /tmp/gerbil-${GERBIL_VERSION}-gambit-${GAMBIT_VERSION}.tgz /
+RUN tar -czvf /gerbil-gambit.tgz /opt
 
 WORKDIR /src
 CMD ["gxi"]
