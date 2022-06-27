@@ -20,7 +20,9 @@ fedora:
 ubuntu:
 	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="ubuntu" -t final $(ROOT_DIR)
 	docker tag final jaimef/gerbil-ubuntu
-    docker run -v $(PWD):/src -t jaimef/gerbil-ubuntu "mv /opt/"
+	docker run -v $(PWD):/src -t jaimef/gerbil-ubuntu "mv /gerbil-gambit.tgz /src/ubuntu.tgz"
+	mkdir -p $(PWD)/dist/ubuntu
+	tar -C $(PWD)/dist/ubuntu $(PWD)/dist/ubuntu
 
 ubuntu-current-jedi:
 	docker build --rm=true --no-cache -t ubuntu-current-jedi $(ROOT_DIR)/ubuntu-current-jedi
