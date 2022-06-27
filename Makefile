@@ -18,9 +18,9 @@ fedora:
 	docker tag final jaimef/gerbil-fedora
 
 ubuntu:
-	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="ubuntu" -t final $(ROOT_DIR)
-	docker tag final jaimef/gerbil-ubuntu
-	docker run -v $(PWD):/src -t jaimef/gerbil-ubuntu "mv /gerbil-gambit.tgz /src/ubuntu.tgz"
+	podman build --target final --build-arg squid=$(squid_ip) --build-arg distro="ubuntu" -t final $(ROOT_DIR)
+	podman tag final jaimef/gerbil-ubuntu
+	podman run -v $(PWD):/src -t jaimef/gerbil-ubuntu "mv /gerbil-gambit.tgz /src/ubuntu.tgz"
 	mkdir -p $(PWD)/dist/ubuntu
 	tar -C $(PWD)/dist/ubuntu $(PWD)/dist/ubuntu
 

@@ -8,7 +8,7 @@ ARG squid
 #ENV http_proxy=http://${squid}:3128
 ARG GERBIL_VERSION=v0.17.0
 ARG GAMBIT_VERSION=v4.9.4
-ENV GERBIL_BUILD_CORES=16
+ENV GERBIL_BUILD_CORES=8
 ENV DEBIAN_FRONTEND=noninteractive
 ARG distro
 RUN mkdir -p /src /opt
