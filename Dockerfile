@@ -77,7 +77,6 @@ FROM gerbil as final
 ARG GERBIL_VERSION
 ARG GAMBIT_VERSION
 RUN rm -rf /opt/gerbil-src /opt/gambit-src
-RUN tar -czvf /gerbil-gambit.tgz /opt
 
 WORKDIR /src
 CMD ["gxi"]
