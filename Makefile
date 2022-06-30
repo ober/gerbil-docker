@@ -21,15 +21,18 @@ ubuntu:
 	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="ubuntu" -t final $(ROOT_DIR)
 	docker tag final uaptf/gerbil-ubuntu
 	docker run -t uaptf/gerbil-ubuntu
+    docker
 
 ubuntu-current-jedi:
 	docker build --rm=true --no-cache -t ubuntu-current-jedi $(ROOT_DIR)/ubuntu-current-jedi
 	docker tag ubuntu-current-jedi uaptf/jedi:ubuntu
 
-push-all:
-	docker push uaptf/base:centos
+push-all: all
+	docker push uaptf/alpine
+	docker push uaptf/ubuntu
+	docker push uaptf/fedora
 	docker push uaptf/centos
-	docker push uaptf/centos:static
 
+all: alpine centos fedora ubuntu
 
 docker: ubuntu
