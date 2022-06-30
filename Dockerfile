@@ -33,7 +33,7 @@ RUN case ${distro} in \
 
 FROM base as gambit
 ENV GAMBIT_HOME=/opt/gambit
-ENV GERBIL_BUILD_CORES=16
+ENV GERBIL_BUILD_CORES=8
 ENV GERBIL_HOME=/opt/gerbil
 ENV GERBIL_PATH=/src/.gerbil
 ENV PATH=${GAMBIT_HOME}/bin:${GERBIL_HOME}/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin
