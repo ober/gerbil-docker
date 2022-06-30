@@ -7,28 +7,29 @@ $(info $(squid_ip) is squid)
 
 alpine:
 	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="alpine" -t final $(ROOT_DIR)
-	docker tag final jaimef/gerbil-alpine
+	docker tag final uaptf/gerbil-alpine
 
 centos:
 	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="centos" -t final $(ROOT_DIR)
-	docker tag final jaimef/gerbil-centos
+	docker tag final uaptf/gerbil-centos
 
 fedora:
 	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="fedora" -t final $(ROOT_DIR)
-	docker tag final jaimef/gerbil-fedora
+	docker tag final uaptf/gerbil-fedora
 
 ubuntu:
 	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="ubuntu" -t final $(ROOT_DIR)
-	docker tag final jaimef/gerbil-ubuntu
+	docker tag final uaptf/gerbil-ubuntu
+	docker run -t uaptf/gerbil-ubuntu
 
 ubuntu-current-jedi:
 	docker build --rm=true --no-cache -t ubuntu-current-jedi $(ROOT_DIR)/ubuntu-current-jedi
-	docker tag ubuntu-current-jedi jaimef/jedi:ubuntu
+	docker tag ubuntu-current-jedi uaptf/jedi:ubuntu
 
 push-all:
-	docker push jaimef/base:centos
-	docker push jaimef/centos
-	docker push jaimef/centos:static
+	docker push uaptf/base:centos
+	docker push uaptf/centos
+	docker push uaptf/centos:static
 
 
 docker: ubuntu
