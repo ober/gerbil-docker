@@ -20,6 +20,10 @@ fedora:
 	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="fedora" -t final $(ROOT_DIR)
 	docker tag final uaptf/gerbil-fedora
 
+amazonlinux:
+	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="amazonlinux" -t final $(ROOT_DIR)
+	docker tag final uaptf/gerbil-amazonlinux
+
 ubuntu:
 	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="ubuntu" -t final $(ROOT_DIR)
 	docker tag final uaptf/gerbil-ubuntu
