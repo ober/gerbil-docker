@@ -18,7 +18,10 @@ RUN case ${distro} in \
     cd /src && git clone --recurse-submodules https://github.com/google/leveldb.git && cd /src/leveldb && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build . &&  mv libleveldb.a /usr/lib && \
     cd /src && git clone https://github.com/LMDB/lmdb && cd /src/lmdb/libraries/liblmdb && make && cd /src/lmdb/libraries/liblmdb && mv liblmdb.a /usr/lib \
     ;; \
-    fedora|centos) \
+    amazonlinux) \
+    yum update -y && yum groupinstall -y 'Development Tools' && yum install -y cmake leveldb-devel lmdb-devel openssl-devel libxml2-devel libyaml-devel libsqlite3x-devel mariadb-devel \
+    ;; \
+    fedora) \
     yum update -y &&  dnf groupinstall -y 'Development Tools' && dnf install -y cmake leveldb-devel lmdb-devel openssl-devel libxml2-devel libyaml-devel libsqlite3x-devel mariadb-devel \
     ;; \
     ubuntu) \
