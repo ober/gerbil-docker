@@ -15,16 +15,18 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN mkdir -p /src /opt
 RUN case ${distro} in \
     alpine) \
-    apk update && apk add ${packages[@]} && \
+    apk update && \
+    eval apk add ${packages} && \
     cd /src && git clone --recurse-submodules https://github.com/google/leveldb.git && cd /src/leveldb && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build . &&  mv libleveldb.a /usr/lib && \
     cd /src && git clone https://github.com/LMDB/lmdb && cd /src/lmdb/libraries/liblmdb && make && cd /src/lmdb/libraries/liblmdb && mv liblmdb.a /usr/lib \
     ;; \
     amazonlinux|fedora) \
-    yum update -y && yum groupinstall -y 'Development Tools' && yum install -y ${packages[@]}
+    yum update -y && yum groupinstall -y 'Development Tools' && \
+    eval yum install -y ${packages} \
     ;; \
     ubuntu) \
     apt update -y && \
-    apt install -y ${packages[@]}
+    eval apt install -y ${packages} \
     ;; \
     *) \
     echo "Unknown distro ${distro}" \

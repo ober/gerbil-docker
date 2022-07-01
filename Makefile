@@ -9,9 +9,9 @@ cores := $(shell grep -c "^processor" /proc/cpuinfo)
 #$(eval squid_ip := $(shell docker inspect squid|jq -r '.[].NetworkSettings.IPAddress'))
 #$(info $(squid_ip) is squid)
 
+alpine: packages := autoconf automake cmake curl g++ gcc git libgcc libtool leveldb-dev lmdb-dev libxml2-dev linux-headers make mariadb-dev musl musl-dev nodejs openssl-dev openssl-libs-static ruby sqlite-dev yaml-dev yaml-static zlib-static
 alpine:
-	packages := autoconf automake cmake curl g++ gcc git libgcc libtool leveldb-dev lmdb-dev libxml2-dev linux-headers make mariadb-dev musl musl-dev nodejs openssl-dev openssl-libs-static ruby sqlite-dev yaml-dev yaml-static zlib-static
-    docker build --target final --build-arg packages=$(packages) --build-arg cores=$(cores) --build-arg distro="alpine" -t final $(ROOT_DIR)
+	docker build --target final --build-arg packages="$(packages)" --build-arg cores=$(cores) --build-arg distro="alpine" -t final $(ROOT_DIR)
 	docker tag final gerbil/alpine
 
 amazonlinux:
@@ -22,14 +22,14 @@ centos:
 	docker build --target final --build-arg squid=$(squid_ip) --build-arg distro="centos" -t final $(ROOT_DIR)
 	docker tag final gerbil/centos
 
+fedora: packages := cmake leveldb-devel lmdb-devel openssl-devel libxml2-devel libyaml-devel libsqlite3x-devel mariadb-devel mariadb-libs sqlite-devel
 fedora:
-	packages := cmake leveldb-devel lmdb-devel openssl-devel libxml2-devel libyaml-devel libsqlite3x-devel mariadb-devel mariadb-libs sqlite-devel
-	docker build --target final --build-arg packages=$(packages) --build-arg cores=$(cores) --build-arg distro="fedora" -t final $(ROOT_DIR)
+	docker build --target final --build-arg packages="$(packages)" --build-arg cores=$(cores) --build-arg distro="fedora" -t final $(ROOT_DIR)
 	docker tag final gerbil/fedora
 
+ubuntu: packages := autoconf bison build-essential curl gawk git libleveldb-dev libleveldb1d liblmdb-dev libmysqlclient-dev libnss3-dev libsnappy1v5 libsqlite3-dev libssl-dev libxml2-dev libyaml-dev pkg-config python3 rsync texinfo zlib1g-dev rubygems
 ubuntu:
-	packages := autoconf bison build-essential curl gawk git libleveldb-dev libleveldb1d liblmdb-dev libmysqlclient-dev libnss3-dev libsnappy1v5 libsqlite3-dev libssl-dev libxml2-dev libyaml-dev pkg-config python3 rsync texinfo zlib1g-dev rubygems
-	docker build --target final --build-arg packages=$(packages) --build-arg cores=$(cores) --build-arg distro="ubuntu" -t final $(ROOT_DIR)
+	docker build --target final --build-arg packages="$(packages)" --build-arg cores=$(cores) --build-arg distro="ubuntu" -t final $(ROOT_DIR)
 	docker tag final gerbil/ubuntu
 
 ubuntu-current-jedi:
