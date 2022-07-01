@@ -19,7 +19,7 @@ RUN case ${distro} in \
     cd /src && git clone https://github.com/LMDB/lmdb && cd /src/lmdb/libraries/liblmdb && make && cd /src/lmdb/libraries/liblmdb && mv liblmdb.a /usr/lib \
     ;; \
     amazonlinux|fedora) \
-    yum update -y && yum groupinstall -y 'Development Tools' && yum install -y cmake leveldb-devel lmdb-devel openssl-devel libxml2-devel libyaml-devel libsqlite3x-devel mariadb-devel sqlite-devel \
+    yum update -y && yum groupinstall -y 'Development Tools' && yum install -y cmake leveldb-devel lmdb-devel openssl-devel libxml2-devel libyaml-devel libsqlite3x-devel mariadb-devel mariadb-libs sqlite-devel \
     ;; \
     ubuntu) \
     apt update -y && \
