@@ -38,6 +38,8 @@ package-ubuntu:
 package-fedora:
 	docker run -v $(PWD):/src -t gerbil/fedora bash -c "yum install -y rubygems ruby-devel rpm-build && gem install fpm && fpm -s dir -p /src/ -t rpm -n gerbil-$(GERBIL_VERSION)-gambit-$(GAMBIT_VERSION) --description 'Gambit and Gerbil Package' /opt/gerbil /opt/gambit"
 
+packages: package-ubuntu package-fedora
+
 push-all: all
 	docker push gerbil/alpine
 	docker push gerbil/ubuntu
