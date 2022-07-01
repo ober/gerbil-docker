@@ -27,7 +27,7 @@ centos:
 	docker tag final gerbil/centos
 
 fedora:
-	docker build --target final --build-arg packages="$(packages)" --build-arg cores=$(cores) --build-arg distro="fedora" -t final $(ROOT_DIR)
+	docker build --target final --build-arg packages="$(fedora_packages)" --build-arg cores=$(cores) --build-arg distro="fedora" -t final $(ROOT_DIR)
 	docker tag final gerbil/fedora
 
 ubuntu:
