@@ -49,12 +49,10 @@ RUN git config --global url.https://github.com/.insteadOf git://github.com/
 RUN cd /opt && git clone https://github.com/gambit/gambit gambit-src
 RUN cd /opt/gambit-src && git fetch -a && git checkout ${gambit_version}
 RUN cd /opt/gambit-src \
-    && ./configure CC='gcc -D___SUPPORT_LOWLEVEL_EXEC' \
+    && ./configure CC='gcc' \
     --enable-default-runtime-options=f8,-8,t8 \
-    --enable-targets=js,ruby,python \
     --enable-poll \
     --enable-openssl \
-    --enable-default-compile-options="(compactness 9)" \
     --enable-multiple-versions \
     --enable-single-host \
     --prefix=${GAMBIT_HOME}

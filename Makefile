@@ -11,7 +11,7 @@ $(info $(cores) is cores)
 
 alpine_packages := autoconf automake cmake curl g++ gcc git libgcc libtool leveldb-dev lmdb-dev libxml2-dev linux-headers make mariadb-dev musl musl-dev nodejs openssl-dev openssl-libs-static ruby sqlite-dev yaml-dev yaml-static zlib-static
 amazon_packages := cmake leveldb-devel lmdb-devel openssl-devel libxml2-devel libyaml-devel libsqlite3x-devel mariadb-devel mariadb-libs sqlite-devel
-fedora_packages := cmake leveldb-devel lmdb-devel openssl-devel libxml2-devel libyaml-devel libsqlite3x-devel mariadb-devel mariadb-libs sqlite-devel
+fedora_packages := cmake leveldb-devel lmdb-devel openssl-devel libxml2-devel libyaml-devel libsqlite3x-devel mariadb-devel sqlite-devel
 ubuntu_packages := autoconf bison build-essential curl gawk git libleveldb-dev libleveldb1d liblmdb-dev libmysqlclient-dev libnss3-dev libsnappy1v5 libsqlite3-dev libssl-dev libxml2-dev libyaml-dev pkg-config python3 rsync texinfo zlib1g-dev rubygems
 
 alpine:
