@@ -80,23 +80,23 @@ ubuntu_packages := autoconf \
                    zlib1g-dev
 
 alpine:
-	docker build --target final --build-arg packages="$(alpine_packages)" --build-arg cores=$(cores) --build-arg distro="alpine" -t final $(ROOT_DIR)
+	docker build --target final --rm=true --no-cache --build-arg packages="$(alpine_packages)" --build-arg cores=$(cores) --build-arg distro="alpine" -t final $(ROOT_DIR)
 	docker tag final gerbil/alpine
 
 amazonlinux:
-	docker build --target final --build-arg packages="$(amazon_packages)" --build-arg cores=$(cores)  --build-arg distro="amazonlinux" -t final $(ROOT_DIR)
+	docker build --target final --rm=true --no-cache --build-arg packages="$(amazon_packages)" --build-arg cores=$(cores)  --build-arg distro="amazonlinux" -t final $(ROOT_DIR)
 	docker tag final gerbil/amazonlinux
 
 centos:
-	docker build --target final --build-arg packages="$(centos_packages)" --build-arg cores=$(cores) --build-arg distro="centos" -t final $(ROOT_DIR)
+	docker build --target final --rm=true --no-cache --build-arg packages="$(centos_packages)" --build-arg cores=$(cores) --build-arg distro="centos" -t final $(ROOT_DIR)
 	docker tag final gerbil/centos
 
 fedora:
-	docker build --target final --build-arg packages="$(fedora_packages)" --build-arg cores=$(cores) --build-arg distro="fedora" -t final $(ROOT_DIR)
+	docker build --target final --rm=true --no-cache --build-arg packages="$(fedora_packages)" --build-arg cores=$(cores) --build-arg distro="fedora" -t final $(ROOT_DIR)
 	docker tag final gerbil/fedora
 
 ubuntu:
-	docker build --target final --build-arg packages="$(ubuntu_packages)" --build-arg cores=$(cores) --build-arg distro="ubuntu" -t final $(ROOT_DIR)
+	docker build --target final --rm=true --no-cache --build-arg packages="$(ubuntu_packages)" --build-arg cores=$(cores) --build-arg distro="ubuntu" -t final $(ROOT_DIR)
 	docker tag final gerbil/ubuntu
 
 ubuntu-current-jedi:
