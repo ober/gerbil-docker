@@ -84,7 +84,12 @@ alpine:
 	docker tag final gerbil/alpine
 
 amazonlinux:
-	docker build --target final --rm=true --no-cache --build-arg packages="$(amazon_packages)" --build-arg cores=$(cores)  --build-arg distro="amazonlinux" -t final $(ROOT_DIR)
+	docker build --target final \
+	--build-arg gambit_version=$(GAMBIT_VERSION) \
+	--build-arg gerbil_version=$(GERBIL_VERSION) \
+	--build-arg packages="$(amazon_packages)" \
+	--build-arg cores=$(cores)  \
+	--build-arg distro="amazonlinux" -t final $(ROOT_DIR)
 	docker tag final gerbil/amazonlinux
 
 centos:
