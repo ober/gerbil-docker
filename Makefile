@@ -1,4 +1,4 @@
-.PHONY: alpine amazonlinux ubuntu fedora ubuntu-current-jedi final
+.PHONY: alpine amazonlinux ubuntu fedora fedora-jedi final jedi
 
 GERBIL_VERSION := v0.17.0
 GAMBIT_VERSION := v4.9.4
@@ -104,9 +104,13 @@ ubuntu:
 	docker build --target final --rm=true --no-cache --build-arg packages="$(ubuntu_packages)" --build-arg cores=$(cores) --build-arg distro="ubuntu" -t final $(ROOT_DIR)
 	docker tag final gerbil/ubuntu
 
-ubuntu-current-jedi:
-	docker build --rm=true --no-cache -t ubuntu-current-jedi $(ROOT_DIR)/ubuntu-current-jedi
-	docker tag ubuntu-current-jedi gerbil/jedi:ubuntu
+fedora-jedi:
+	docker build -t fedora-jedi $(ROOT_DIR)/fedora-jedi
+	docker tag fedora-jedi gerbil/jedi:fedora
+
+jedi:
+	docker run -ti -e DISPLAY=$(DISPLAY) -v /tmp/.X11-unix:/tmp/.X11-unix ubuntu-current-jedi  #/opt/jedi/build/develop/jedi
+
 
 package-ubuntu:
 	docker run -v $(PWD):/src -t gerbil/ubuntu bash -c "gem install fpm && fpm -s dir -p /src/ -t deb -n gerbil-$(gerbil_version)-gambit-$(gambit_version).ubuntu --description 'Gambit and Gerbil Package' /opt/gerbil /opt/gambit"
